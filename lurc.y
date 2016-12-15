@@ -79,7 +79,7 @@ int main(void)
 
 %}
 
-%token BR_OPEN BR_CLOSE ID END IF WHILE REPEAT LET FUN LETFUN
+%token BR_OPEN BR_CLOSE ID END IF ELSE WHILE REPEAT UNTIL LET FUN LETFUN
 
 %%
 begin: sexpr sexprlist END		{printf("%s\n%s", $1, $2); exit(0);}
@@ -92,8 +92,8 @@ sexpr: ID						{$$ = $1;}
 	| BR_OPEN fun members BR_CLOSE	{$$ = sumstr(4, $2, strdup("("),$3,strdup(")"));}
 	| BR_OPEN IF sexpr sexprlist BR_CLOSE	{$$ = sumstr(5, strdup("if "), $3, strdup(" then "),$4,strdup(" end\n"));}
 	| BR_OPEN WHILE sexpr sexprlist BR_CLOSE	{$$ = sumstr(5, strdup("while "), $3, strdup(" do "),$4,strdup(" end\n"));}
-	| BR_OPEN REPEAT sexpr sexprlist BR_CLOSE	{$$ = sumstr(5, strdup("repeat "), $3, strdup("\nuntil "),$4,strdup(" end\n"));}
-	| BR_OPEN IF sexpr sexprlist sexprlist BR_CLOSE	{$$ = sumstr(7, strdup("if "), $3, strdup(" then\n"),$4, strdup("\nelse "), $5,strdup(" end\n"));}
+	| BR_OPEN REPEAT sexprlist UNTIL sexpr BR_CLOSE	{$$ = sumstr(5, strdup("repeat "), $3, strdup("\nuntil "),$5,strdup(" end\n"));}
+	| BR_OPEN IF sexpr sexprlist ELSE sexprlist BR_CLOSE	{$$ = sumstr(7, strdup("if "), $3, strdup(" then\n"),$4, strdup("\nelse "), $6,strdup(" end\n"));}
 	| BR_OPEN LET ID sexpr BR_CLOSE	{$$ = sumstr(4, $3, strdup(" = "), $4, strdup("\n"));}
 	| BR_OPEN FUN BR_OPEN params BR_CLOSE sexprlist BR_CLOSE	{$$ = sumstr(5, strdup("function("), $4, strdup(") "), $6, strdup(" end\n"));}
 	| BR_OPEN LETFUN ID BR_OPEN params BR_CLOSE sexprlist BR_CLOSE	{$$ = sumstr(7, $3, strdup(" = "), strdup("function("), $5, strdup(") "), $7, strdup(" end\n"));}
