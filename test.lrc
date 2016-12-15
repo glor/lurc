@@ -1,0 +1,16 @@
+(letfun sqare(x) (return (* x x)))
+
+(print "sqares:")
+(let i 1)
+(while (<= i 12)
+	(print (.. i " - " (sqare i)))
+	(let i (+ i 1)))
+
+(print "fib:")
+(letfun fib (x)
+	(if (== x 0) (return 0))
+	(if (== x 1) (return 1))
+	(return (+ (fib (- x 1)) (fib (- x 2)))))
+
+(let i 1)
+(while (<= i 12) (print (.. i " - " (fib i))) (let i (+ i 1)))
